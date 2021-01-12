@@ -15,6 +15,8 @@ import (
 	stdopentracing "github.com/opentracing/opentracing-go"
 	zipkin "github.com/openzipkin/zipkin-go-opentracing"
 	"golang.org/x/net/context"
+
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 const (
@@ -22,6 +24,12 @@ const (
 )
 
 func main() {
+	tracer.Start(
+        tracer.WithEnv("prod"),
+        tracer.WithService("payment"),
+        tracer.WithServiceVersion("v1"),
+    )
+
 	var (
 		port          = flag.String("port", "8080", "Port to bind HTTP listener")
 		zip           = flag.String("zipkin", os.Getenv("ZIPKIN"), "Zipkin address")
@@ -90,4 +98,5 @@ func main() {
 	}()
 
 	logger.Log("exit", <-errc)
+	defer tracer.Stop()
 }
