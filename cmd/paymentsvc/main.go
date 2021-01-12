@@ -24,10 +24,10 @@ const (
 )
 
 func main() {
-	ddagent.tracer.Start(
-        tracer.WithEnv("prod"),
-        tracer.WithService("payment"),
-        tracer.WithServiceVersion("v1"),
+	ddagent.Start(
+        ddagent.WithEnv("prod"),
+        ddagent.WithService("payment"),
+        ddagent.WithServiceVersion("v1"),
     )
 
 	var (
@@ -98,5 +98,5 @@ func main() {
 	}()
 
 	logger.Log("exit", <-errc)
-	defer ddagent.tracer.Stop()
+	defer ddagent.Stop()
 }
