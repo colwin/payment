@@ -16,7 +16,7 @@ import (
 	zipkin "github.com/openzipkin/zipkin-go-opentracing"
 	"golang.org/x/net/context"
 
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
+	ddagent "gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 const (
@@ -24,7 +24,7 @@ const (
 )
 
 func main() {
-	tracer.Start(
+	ddagent.tracer.Start(
         tracer.WithEnv("prod"),
         tracer.WithService("payment"),
         tracer.WithServiceVersion("v1"),
@@ -98,5 +98,5 @@ func main() {
 	}()
 
 	logger.Log("exit", <-errc)
-	defer tracer.Stop()
+	defer ddagent.tracer.Stop()
 }
