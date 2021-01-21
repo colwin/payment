@@ -19,7 +19,6 @@ import (
 	ddagent "gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 	ddopentrace "gopkg.in/DataDog/dd-trace-go.v1/ddtrace/opentracer"
 
-	"reflect"
 )
 
 const (
@@ -75,7 +74,7 @@ func main() {
 		}
 
 		t := ddopentrace.New(
-			ddagent.WithService("catalogue"), 
+			ddagent.WithService("payment"), 
 			ddagent.WithEnv("production"), 
 			ddagent.WithServiceVersion("v1"),
 		)
