@@ -52,7 +52,13 @@ func main() {
 		host := strings.Split(localAddr.String(), ":")[0]
 		defer conn.Close()
 		if *zip == "" {
-			tracer = stdopentracing.NoopTracer{}
+			//tracer = stdopentracing.NoopTracer{}
+			tracer = ddopentrace.New(
+				ddagent.WithService("payment"), 
+				ddagent.WithEnv("production"), 
+				ddagent.WithServiceVersion("v1"),
+			)
+			defer ddagent.Stop()
 		} else {
 			logger := log.NewContext(logger).With("tracer", "Zipkin")
 			logger.Log("addr", zip)
@@ -73,14 +79,9 @@ func main() {
 			}
 		}
 
-		t := ddopentrace.New(
-			ddagent.WithService("payment"), 
-			ddagent.WithEnv("production"), 
-			ddagent.WithServiceVersion("v1"),
-		)
-		defer ddagent.Stop()
+		
 		//stdopentracing.SetGlobalTracer(tracer)
-		stdopentracing.InitGlobalTracer(t)
+		stdopentracing.InitGlobalTracer(tracer)
 
 	}
 	// Mechanical stuff.
